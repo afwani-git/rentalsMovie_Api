@@ -30,30 +30,26 @@ router.get('/',[auth,admin],async (req,res) => {
 
 //save 
 router.post('/', async (req,res) => {
-	try{
-		const { error } = validateUser(req.body);
-		if(error) return res.status(400).send(error.details[0].message);
+	const { error } = validateUser(req.body);
+	if(error) return res.status(400).send(error.details[0].message);
 
-		const email = await userModel.findOne({email:req.body.email});
-		if(email) return res.status(400).send("eamil  sudah ada !");
+	const email = await userModel.findOne({email:req.body.email});
+	if(email) return res.status(400).send("eamil  sudah ada !");
 
-		const salt = await bcrypt.genSalt(10);
-		const hashesPassword = await bcrypt.hash(req.body.password,salt);
+	const salt = await bcrypt.genSalt(10);
+	const hashesPassword = await bcrypt.hash(req.body.password,salt);
 
-		const newUser = new userModel({
-			_id:new mongoose.Types.ObjectId(),
-			name:req.body.name,
-			email:req.body.email,
-			password:hashesPassword
-		}) 
+	const newUser = new userModel({
+		_id:new mongoose.Types.ObjectId(),
+		name:req.body.name,
+		email:req.body.email,
+		password:hashesPassword
+	}) 
 
-		await newUser.save();
-		const token = newUser.generateAuthToken();
-		res.header('x-auth-token',token);
-		res.status(200).send(_.pick(newUser,['_id','name','email']));
-	}catch(err){
-		console.log(err.message);
-	}
+	await newUser.save();
+	const token = newUser.generateAuthToken();
+	res.header('x-auth-token',token);
+	res.status(200).send(_.pick(newUser,['_id','name','email']));
 });
 
 module.exports = router;

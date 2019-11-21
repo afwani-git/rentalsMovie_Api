@@ -1,3 +1,4 @@
+require('express-async-errors');//Cathcing Error Nice Bro ea <============
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();

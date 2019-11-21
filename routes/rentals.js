@@ -13,12 +13,8 @@ const admin = require('../middleware/admin.js');
 const auth = require('../middleware/auth.js');
 
 router.get('/',[admin,auth], async (req, res) => {
-	try {
-	  const rentals = await rentalsModel.find().sort('-dateOut');
-	  res.send(rentals);
-	} catch(e) {
-		console.log(e);
-	}
+  const rentals = await rentalsModel.find().sort('-dateOut');
+  res.send(rentals);
 });
 
 router.post('/',auth,async (req, res) => {

@@ -17,33 +17,28 @@ router.get('/', async (req, res) => {
 
 //add movies
 router.post('/',[admin,auth], async (req, res) => {
-  try {
-    const { error } = validateMovies(req.body); 
-    if (error) return res.status(400).send(error.details[0].message);
-
-    // check 
-    const genres = await Genre.find({name:req.body.NameGenres});
-    if(!genres) return res.status(404).send({err:"genres not found"});
-
-    let genre = new moviesModel({
-      _id:new ObjectId,
-      title:req.body.title,
-      genres:{
-        _id:genres[0]._id,
-        name:genres[0].name
-      },
-      numberInStock:req.body.numberInStock,
-      dailyRentalRate:req.body.dailyRentalRate
-    });
-
-    genre = await genre.save();
-    
-    res.send(genre);  
-  } catch(e) {
-    // statements
-    console.log(e);
-  }
   
+  const { error } = validateMovies(req.body); 
+  if (error) return res.status(400).send(error.details[0].message);
+
+  // check 
+  const genres = await Genre.find({name:req.body.NameGenres});
+  if(!genres) return res.status(404).send({err:"genres not found"});
+
+  let genre = new moviesModel({
+    _id:new ObjectId,
+    title:req.body.title,
+    genres:{
+      _id:genres[0]._id,
+      name:genres[0].name
+    },
+    numberInStock:req.body.numberInStock,
+    dailyRentalRate:req.body.dailyRentalRate
+  });
+
+  genre = await genre.save();
+  
+  res.send(genre); 
 });
 
 // update movies

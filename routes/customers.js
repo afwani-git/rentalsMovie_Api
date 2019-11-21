@@ -11,23 +11,19 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/',[auth,admin], async (req, res) => {
-	try{
-		const { error } = validateCustomers(req.body); 
-		if (error) return res.status(400).send(error.details[0].message);
+	const { error } = validateCustomers(req.body); 
+	if (error) return res.status(400).send(error.details[0].message);
 
-		let genre = new ModelCustomers({
-			_id:new ObjectId(),
-			name: req.body.name,
-			isGold:req.body.isGold,
-			phone:req.body.phone
-		});
+	let genre = new ModelCustomers({
+		_id:new ObjectId(),
+		name: req.body.name,
+		isGold:req.body.isGold,
+		phone:req.body.phone
+	});
 
-		genre = await genre.save();
+	genre = await genre.save();
 
-		res.send(genre);
-	}catch(err){
-		console.log(err);
-	}
+	res.send(genre);
 });
 
 
